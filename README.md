@@ -329,5 +329,5 @@ Widget indexBuilder(BuildContext context, int index) {
 
 ```
 
-![Flutter listview with syncfusion datapager ](imgaes/flutter-datapager-listview.gif)
+![Flutter listview with syncfusion datapager ](images/flutter-datapager-listview.gif)
 
