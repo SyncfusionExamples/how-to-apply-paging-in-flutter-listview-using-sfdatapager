@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
-  syncfusion_flutter_datagrid: ^18.3.40-beta
+  syncfusion_flutter_datagrid: ^18.4.30-beta
 
 dev_dependencies:
   flutter_test:

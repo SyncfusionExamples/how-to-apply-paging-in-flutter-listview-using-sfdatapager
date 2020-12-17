@@ -17,11 +17,9 @@ List<PagingProduct> _paginatedProductData = [];
 
 List<PagingProduct> _products = [];
 
-bool showLoadingIndicator = false;
-
 class _DataPagerWithListView extends State<DataPagerWithListView> {
   static const double dataPagerHeight = 70.0;
-
+  bool showLoadingIndicator = false;
   @override
   void initState() {
     super.initState();
@@ -69,31 +67,46 @@ class _DataPagerWithListView extends State<DataPagerWithListView> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Fruits'),
+      home: SafeArea(
+        bottom: true,
+        top: false,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Fruits'),
+          ),
+          body: LayoutBuilder(builder: (context, constraint) {
+            return Column(
+              children: [
+                Container(
+                  height: constraint.maxHeight - dataPagerHeight,
+                  child: loadListView(constraint),
+                ),
+                Container(
+                  height: dataPagerHeight,
+                  child: SfDataPagerTheme(
+                      data: SfDataPagerThemeData(
+                        itemBorderRadius: BorderRadius.circular(5),
+                      ),
+                      child: SfDataPager(
+                          rowsPerPage: 10,
+                          onPageNavigationStart: (pageIndex) {
+                            setState(() {
+                              showLoadingIndicator = true;
+                            });
+                          },
+                          onPageNavigationEnd: (pageIndex) {
+                            setState(() {
+                              showLoadingIndicator = false;
+                            });
+                          },
+                          delegate:
+                              CustomSliverChildBuilderDelegate(indexBuilder)
+                                ..addListener(rebuildList))),
+                )
+              ],
+            );
+          }),
         ),
-        body: LayoutBuilder(builder: (context, constraint) {
-          return Column(
-            children: [
-              Container(
-                height: constraint.maxHeight - dataPagerHeight,
-                child: loadListView(constraint),
-              ),
-              Container(
-                height: dataPagerHeight,
-                child: SfDataPagerTheme(
-                    data: SfDataPagerThemeData(
-                      itemBorderRadius: BorderRadius.circular(5),
-                    ),
-                    child: SfDataPager(
-                        rowsPerPage: 10,
-                        delegate: CustomSliverChildBuilderDelegate(indexBuilder)
-                          ..addListener(rebuildList))),
-              )
-            ],
-          );
-        }),
       ),
     );
   }
@@ -214,15 +227,9 @@ class CustomSliverChildBuilderDelegate extends SliverChildBuilderDelegate
       endIndex = _products.length - 1;
     }
 
-    showLoadingIndicator = true;
-    notifyListeners();
     await Future.delayed(Duration(milliseconds: 2000));
-    showLoadingIndicator = false;
-
-    _paginatedProductData = _products
-        .getRange(startRowIndex, endIndex)
-        .toList(growable: false);
-
+    _paginatedProductData =
+        _products.getRange(startRowIndex, endIndex).toList(growable: false);
     notifyListeners();
     return true;
   }
@@ -232,7 +239,3 @@ class CustomSliverChildBuilderDelegate extends SliverChildBuilderDelegate
     return true;
   }
 }
-
-
-
-

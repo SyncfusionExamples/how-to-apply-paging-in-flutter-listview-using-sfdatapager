@@ -62,6 +62,16 @@ Widget build(BuildContext context) {
                   ),
                   child: SfDataPager(
                       rowsPerPage: 10,
+                      onPageNavigationStart: (pageIndex) {
+                          setState(() {
+                            showLoadingIndicator = true;
+                          });
+                       },
+                      onPageNavigationEnd: (pageIndex) {
+                          setState(() {
+                            showLoadingIndicator = false;
+                          });
+                      },
                       delegate: CustomSliverChildBuilderDelegate(indexBuilder)
                         ..addListener(rebuildList))),
             )
@@ -104,15 +114,10 @@ class CustomSliverChildBuilderDelegate extends SliverChildBuilderDelegate
       endIndex = _products.length - 1;
     }
 
-    showLoadingIndicator = true;
-    notifyListeners();
     await Future.delayed(Duration(milliseconds: 2000));
-    showLoadingIndicator = false;
-
     _paginatedProductData = _products
         .getRange(startRowIndex, endIndex)
         .toList(growable: false);
-
     notifyListeners();
     return true;
   }
@@ -206,6 +211,16 @@ Widget build(BuildContext context) {
                   ),
                   child: SfDataPager(
                       rowsPerPage: 10,
+                      onPageNavigationStart: (pageIndex) {
+                          setState(() {
+                            showLoadingIndicator = true;
+                          });
+                       },
+                      onPageNavigationEnd: (pageIndex) {
+                          setState(() {
+                            showLoadingIndicator = false;
+                          });
+                      },
                       delegate: CustomSliverChildBuilderDelegate(indexBuilder)
                         ..addListener(rebuildList))),
             )

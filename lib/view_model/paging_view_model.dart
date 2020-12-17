@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 final PagingProductRepository pagingProductRepository =
     PagingProductRepository();
 
-
 List<PagingProduct> populateData() {
   final List<PagingProduct> pagingProducts = [];
   var index = 0;
