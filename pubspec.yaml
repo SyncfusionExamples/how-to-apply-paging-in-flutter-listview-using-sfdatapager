@@ -6,13 +6,13 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
-  syncfusion_flutter_datagrid: ^18.4.30-beta
+  syncfusion_flutter_datagrid: ^19.1.54-beta.1
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class PagingProduct {
   PagingProduct(
       {this.name,
@@ -10,17 +8,17 @@ class PagingProduct {
       this.offer,
       this.reviewValue});
 
-  String name;
+  final String? name;
 
-  String ratings;
+  final String? ratings;
 
-  String image;
+  final String? image;
 
-  String weight;
+  final String? weight;
 
-  double price;
+  final double? price;
 
-  String offer;
+  final String? offer;
 
-  double reviewValue;
+  final double? reviewValue;
 }
