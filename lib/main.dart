@@ -16,14 +16,17 @@ class DataPagerWithListView extends StatefulWidget {
 List<PagingProduct> _paginatedProductData = [];
 
 List<PagingProduct> _products = [];
+int rowsPerPage = 10;
 
 class _DataPagerWithListView extends State<DataPagerWithListView> {
   static const double dataPagerHeight = 70.0;
   bool showLoadingIndicator = false;
+  double pageCount = 0;
   @override
   void initState() {
     super.initState();
     _products = List.from(populateData());
+    pageCount = (_products.length / rowsPerPage).ceilToDouble();
   }
 
   void rebuildList() {
@@ -88,7 +91,7 @@ class _DataPagerWithListView extends State<DataPagerWithListView> {
                         itemBorderRadius: BorderRadius.circular(5),
                       ),
                       child: SfDataPager(
-                          rowsPerPage: 10,
+                          pageCount: pageCount,
                           onPageNavigationStart: (pageIndex) {
                             setState(() {
                               showLoadingIndicator = true;
@@ -128,7 +131,7 @@ class _DataPagerWithListView extends State<DataPagerWithListView> {
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10)),
-                      child: Image.asset(data.image, width: 100, height: 100),
+                      child: Image.asset(data.image!, width: 100, height: 100),
                     ),
                   ),
                   Container(
@@ -138,7 +141,7 @@ class _DataPagerWithListView extends State<DataPagerWithListView> {
                       children: [
                         Container(
                           width: constraint.maxWidth - 130,
-                          child: Text(data.name,
+                          child: Text(data.name!,
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.black87,
@@ -146,7 +149,7 @@ class _DataPagerWithListView extends State<DataPagerWithListView> {
                         ),
                         Container(
                           width: constraint.maxWidth - 130,
-                          child: Text(data.weight,
+                          child: Text(data.weight!,
                               style: TextStyle(
                                   color: Colors.black87, fontSize: 10)),
                         ),
@@ -216,20 +219,17 @@ class CustomSliverChildBuilderDelegate extends SliverChildBuilderDelegate
   int get childCount => _paginatedProductData.length;
 
   @override
-  int get rowCount => _products.length;
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    int startRowIndex = newPageIndex * rowsPerPage;
+    int endRowIndex = startRowIndex + rowsPerPage;
 
-  @override
-  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex,
-      int startRowIndex, int rowsPerPage) async {
-    int endIndex = startRowIndex + rowsPerPage;
-
-    if (endIndex > _products.length) {
-      endIndex = _products.length - 1;
+    if (endRowIndex > _products.length) {
+      endRowIndex = _products.length - 1;
     }
 
     await Future.delayed(Duration(milliseconds: 2000));
     _paginatedProductData =
-        _products.getRange(startRowIndex, endIndex).toList(growable: false);
+        _products.getRange(startRowIndex, endRowIndex).toList(growable: false);
     notifyListeners();
     return true;
   }
